@@ -1,0 +1,328 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-selectos-blue: #004b93;
+  --color-selectos-cyan: #00a0e3;
+  --color-selectos-yellow: #ffe000;
+  --color-selectos-navy: #0b2b5c;
+  --color-selectos-green: #39b54a;
+}
+
+/* Custom Scrollbar Styles for consistent dark theme finish */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* =========================================================================
+   LIGHT THEME OVERRIDES (CRISP, CONTRASTING & GORGEOUS FLAT DESIGN)
+   ========================================================================= */
+
+body.light {
+  background-color: #f8fafc !important; /* Touch/Base soft grey backdrop */
+  color: #0f172a !important; /* High contrast text slate-900 */
+}
+
+/* Page containers & body backdrops */
+body.light .bg-slate-950,
+body.light .min-h-screen {
+  background-color: #f1f5f9 !important; /* Clean slate-100 */
+}
+
+/* Header strip - Keep the elegant theme's slate-navy background for premium design contrast */
+body.light header.bg-selectos-navy {
+  background-color: #00254c !important; /* Rich deep blue */
+  border-color: #1e3a61 !important;
+}
+
+body.light header.bg-selectos-navy * {
+  color: #ffffff !important; /* Preserve high contrast white text over header */
+}
+
+body.light header.bg-selectos-navy span[class*="text-selectos-cyan"] {
+  color: #38bdf8 !important; /* Vivid cyan light highlights on navy background */
+}
+
+body.light header.bg-selectos-navy .bg-selectos-blue {
+  background-color: #1e40af !important; /* crisp contrast badge */
+}
+
+/* Primary tabs, cards, panels, sidebars, and dialogue boxes */
+body.light .bg-slate-900,
+body.light .bg-slate-850,
+body.light .bg-slate-800 {
+  background-color: #ffffff !important; /* Crisp pure white paper background */
+  border-color: #cbd5e1 !important; /* High-contrast clean gray border */
+  color: #0f172a !important;
+}
+
+/* Match ANY opacity-based or dark nested well container (e.g. bg-slate-900/60, bg-slate-950/30) */
+body.light [class*="bg-slate-950/"],
+body.light [class*="bg-slate-900/"],
+body.light [class*="bg-slate-850/"],
+body.light [class*="bg-slate-800/"],
+body.light [class*="bg-slate-750/"],
+body.light [class*="bg-slate-700/"],
+body.light [class*="bg-slate-955/"] {
+  background-color: #f1f5f9 !important; /* Slate-100 solid box for premium contrast */
+  box-shadow: inset 0 1px 2px 0 rgba(15, 23, 42, 0.02) !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* Highlights for state panels or notifications */
+body.light .bg-selectos-blue\/15,
+body.light .bg-selectos-blue\/20,
+body.light .bg-selectos-blue\/30,
+body.light .bg-selectos-blue\/40 {
+  background-color: #e0f2fe !important; /* Soft premium skies blue background */
+  border-color: #bae6fd !important;
+}
+
+body.light .bg-selectos-green\/5,
+body.light .bg-selectos-green\/10 {
+  background-color: #e8f5e9 !important; /* Cozy pale emerald backdrop */
+  border-color: #c8e6c9 !important;
+}
+
+/* Wildcard slate text overrides for guaranteed premium readability */
+body.light [class*="text-slate-100"],
+body.light [class*="text-slate-150"],
+body.light [class*="text-slate-200"],
+body.light [class*="text-slate-255"],
+body.light [class*="text-slate-250"],
+body.light [class*="text-slate-300"],
+body.light [class*="text-slate-350"] {
+  color: #0f172a !important; /* Rich readable dark navy-gray slate-900 */
+}
+
+body.light [class*="text-slate-400"],
+body.light [class*="text-slate-450"],
+body.light [class*="text-slate-500"] {
+  color: #334155 !important; /* Crisp secondary text slate-700 */
+}
+
+/* Ensure secondary sub-text opacity overrides do not diminish legibility */
+body.light .text-slate-300\/80,
+body.light .text-slate-200\/90,
+body.light .text-slate-100\/70,
+body.light .text-slate-200\/80 {
+  color: #1e293b !important; /* Readable dark-gray */
+}
+
+/* Force standard dark ink on all generic cards headers */
+body.light h1, body.light h2, body.light h3, body.light h4, body.light h5, body.light h6 {
+  color: #0f172a !important;
+}
+
+/* Navigation tabs menu logic override */
+body.light #navigation-tabs {
+  background-color: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+}
+
+body.light #navigation-tabs button:not(.bg-selectos-blue) {
+  color: #334155 !important; /* Slate-700 */
+}
+
+body.light #navigation-tabs button:not(.bg-selectos-blue):hover {
+  color: #0f172a !important;
+  background-color: #f1f5f9 !important;
+}
+
+/* Borders and lines must be clear, crisp, and high-contrast */
+body.light [class*="border-slate-"],
+body.light [class*="divide-slate-"] {
+  border-color: #cbd5e1 !important; /* Clean light slate-200 border */
+}
+
+/* Forms & Inputs styling */
+body.light input,
+body.light select,
+body.light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+body.light input::placeholder,
+body.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.light input:focus,
+body.light select:focus,
+body.light textarea:focus {
+  border-color: #004b93 !important;
+  box-shadow: 0 0 0 1px #004b93 !important;
+}
+
+/* Primary Action Buttons (Ensure they keep contrast and text visibility) */
+body.light .bg-selectos-blue {
+  background-color: #004b93 !important;
+  color: #ffffff !important;
+}
+body.light .bg-selectos-blue * {
+  color: #ffffff !important;
+}
+
+body.light .bg-selectos-yellow {
+  background-color: #ffe000 !important;
+  color: #002e62 !important;
+}
+body.light .bg-selectos-yellow * {
+  color: #002e62 !important;
+}
+
+/* --- ACCESSIBLE HIGH-CONTRAST DYNAMIC SEMANTIC OVERRIDES --- */
+
+/* 1. EMERALD / GREEN (Coupons, Vales, and Savings indicators) */
+body.light .bg-emerald-950\/20, 
+body.light .bg-emerald-900\/10,
+body.light .bg-emerald-500\/10,
+body.light .bg-emerald-600\/10,
+body.light [class*="bg-emerald-500/"],
+body.light [class*="bg-emerald-950/"] {
+  background-color: #e8f5e9 !important; /* High comfort soft green */
+  border-color: #a5d6a7 !important;
+}
+
+body.light .text-emerald-300,
+body.light .text-emerald-400,
+body.light .text-emerald-500 {
+  color: #1b5e20 !important; /* Deep forest green */
+}
+
+body.light .text-emerald-300 *,
+body.light .text-emerald-400 *,
+body.light .text-emerald-500 * {
+  color: #1b5e20 !important;
+}
+
+body.light .bg-emerald-600 {
+  background-color: #2e7d32 !important; /* rich emerald fill */
+  color: #ffffff !important;
+}
+
+/* 2. INDIGO / PURPLE / BLUE (Chatbot Advice and Banners) */
+body.light .bg-indigo-950\/20,
+body.light .bg-indigo-900\/10,
+body.light .bg-indigo-500\/10,
+body.light [class*="bg-indigo-950/"],
+body.light [class*="bg-indigo-500/"] {
+  background-color: #eef2ff !important; /* Clean rich light purple */
+  border-color: #c7d2fe !important;
+}
+
+body.light .text-indigo-200,
+body.light .text-indigo-300,
+body.light .text-indigo-400,
+body.light .text-indigo-500 {
+  color: #1e1b4b !important; /* Dark solid royal indigo text! */
+}
+
+body.light .text-indigo-200 *, 
+body.light .text-indigo-300 *,
+body.light .text-indigo-400 *,
+body.light .text-indigo-500 * {
+  color: #1e1b4b !important;
+}
+
+/* 3. FUCHSIA / PINK (Credit cards & rewards sliders) */
+body.light .bg-fuchsia-950\/20,
+body.light .bg-fuchsia-900\/10,
+body.light .bg-fuchsia-500\/10,
+body.light [class*="bg-fuchsia-950/"] {
+  background-color: #fdf4ff !important;
+  border-color: #f5d0fe !important;
+}
+
+body.light .text-fuchsia-300,
+body.light .text-fuchsia-400 {
+  color: #701a75 !important; /* Vibrant high contrast fuchsia */
+}
+
+body.light .text-fuchsia-300 *,
+body.light .text-fuchsia-400 * {
+  color: #701a75 !important;
+}
+
+body.light .bg-fuchsia-600 {
+  background-color: #a21caf !important; /* stable strong fuchsia fill */
+  color: #ffffff !important;
+}
+
+/* 4. AMBER / WARNING (Budget warning threshold indicators) */
+body.light .bg-amber-950\/20,
+body.light .bg-amber-900\/10,
+body.light [class*="bg-amber-950/"] {
+  background-color: #fffbeb !important;
+  border-color: #fde68a !important;
+}
+
+body.light .text-amber-300,
+body.light .text-amber-400 {
+  color: #78350f !important; /* deep accessible bronze */
+}
+
+body.light .text-amber-300 *,
+body.light .text-amber-400 * {
+  color: #78350f !important;
+}
+
+/* 5. ROSE / ALERT DANGER */
+body.light .bg-rose-950\/20,
+body.light .bg-rose-900\/10,
+body.light [class*="bg-rose-950/"] {
+  background-color: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+}
+
+body.light .text-rose-300,
+body.light .text-rose-400 {
+  color: #9f1239 !important; /* rich crimson red */
+}
+
+body.light .text-rose-300 *,
+body.light .text-rose-400 * {
+  color: #9f1239 !important;
+}
+
+/* Custom text color branding values */
+body.light .text-selectos-cyan {
+  color: #0284c7 !important; /* ocean blue contrast */
+}
+body.light .text-selectos-green {
+  color: #15803d !important; /* deep rich neon-green alternative */
+}
+body.light .text-selectos-yellow {
+  color: #ca8a04 !important; /* accessible dark golden yellow */
+}
+
+/* Backdrop Modal */
+body.light .fixed.inset-0.bg-slate-950\/80 {
+  background-color: rgba(15, 23, 42, 0.45) !important; /* Elegant light-faded backdrop overlay */
+}
+
+/* Scrollbars for Light Mode */
+body.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+body.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+body.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

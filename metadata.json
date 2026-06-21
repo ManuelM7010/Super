@@ -1,0 +1,6 @@
+{
+  "name": "Mi Super Inteligente",
+  "description": "Gestor de presupuestos de supermercado, listas inteligentes de compras con modo tienda activo y comparador de precios.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

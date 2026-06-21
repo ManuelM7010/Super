@@ -17,7 +17,8 @@ import {
   saveActiveList, 
   saveActiveStoreId, 
   saveMonthlyBudgetGlobal,
-  saveCategories
+  saveCategories,
+  savePayments
 } from './utils/data';
 import { Tienda, Categoria, Articulo, CompraHistorica, MetodoPago } from './types';
 import BudgetDashboard from './components/BudgetDashboard';
@@ -65,7 +66,7 @@ export default function App() {
   const [globalBudget, setGlobalBudget] = useState<number>(() => getMonthlyBudgetGlobal());
   const [stores, setStores] = useState<Tienda[]>(() => getStores());
   const [categories, setCategories] = useState<Categoria[]>(() => getCategories());
-  const [payments] = useState<MetodoPago[]>(() => getPayments());
+  const [payments, setPayments] = useState<MetodoPago[]>(() => getPayments());
   const [history, setHistory] = useState<CompraHistorica[]>(() => getHistory());
   const [activeList, setActiveList] = useState<Articulo[]>(() => getActiveList());
   const [activeStoreId, setActiveStoreId] = useState<string>(() => getActiveStoreId());
@@ -85,6 +86,10 @@ export default function App() {
   useEffect(() => {
     saveCategories(categories);
   }, [categories]);
+
+  useEffect(() => {
+    savePayments(payments);
+  }, [payments]);
 
   useEffect(() => {
     saveActiveList(activeList);
@@ -209,15 +214,6 @@ export default function App() {
             <div id="navigation-tabs" className="bg-slate-900 border border-slate-800/80 p-1.5 rounded-2xl flex flex-wrap gap-1.5 shadow-xl">
               
               <button
-                onClick={() => setActiveTab('asistente_ai')}
-                className={`flex-1 min-w-[125px] py-3 px-2 rounded-xl font-bold text-xs transition flex items-center justify-center space-x-2 select-none ${activeTab === 'asistente_ai' ? 'bg-selectos-blue text-white shadow-xl border border-selectos-cyan/30' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'}`}
-              >
-                <Sparkles className="w-4 h-4 shrink-0 text-selectos-yellow animate-pulse" />
-                <span>🤖 Co-Pilot AI</span>
-                <span className="bg-selectos-yellow text-selectos-navy text-[8px] px-1.5 py-0.5 rounded font-black uppercase shrink-0">Plus</span>
-              </button>
-
-              <button
                 onClick={() => setActiveTab('pre_compras_budget')}
                 className={`flex-1 min-w-[125px] py-3 px-2 rounded-xl font-bold text-xs transition flex items-center justify-center space-x-2 select-none ${activeTab === 'pre_compras_budget' ? 'bg-selectos-blue text-white shadow-xl border border-selectos-cyan/20' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'}`}
               >
@@ -267,14 +263,6 @@ export default function App() {
                   transition={{ duration: 0.18 }}
                 >
                   
-                  {activeTab === 'asistente_ai' && (
-                    <AsistenteSelectosAI
-                      activeList={activeList}
-                      categories={categories}
-                      stores={stores}
-                    />
-                  )}
-
                   {activeTab === 'pre_compras_budget' && (
                     <BudgetDashboard
                       globalBudget={globalBudget}
@@ -289,6 +277,8 @@ export default function App() {
                       setActiveList={setActiveList}
                       activeStoreId={activeStoreId}
                       setActiveStoreId={setActiveStoreId}
+                      payments={payments}
+                      setPayments={setPayments}
                     />
                   )}
 

@@ -5,7 +5,7 @@
 
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Tienda, Categoria, CompraHistorica, Articulo } from '../types';
+import { Tienda, Categoria, CompraHistorica, Articulo, MetodoPago } from '../types';
 import { 
   Wallet, 
   Store, 
@@ -28,7 +28,8 @@ import {
   ShoppingBag,
   Heart,
   Plus,
-  Minus
+  Minus,
+  Trash2
 } from 'lucide-react';
 
 interface BudgetDashboardProps {
@@ -44,6 +45,8 @@ interface BudgetDashboardProps {
   setActiveList: React.Dispatch<React.SetStateAction<Articulo[]>>;
   activeStoreId: string;
   setActiveStoreId: React.Dispatch<React.SetStateAction<string>>;
+  payments: MetodoPago[];
+  setPayments: React.Dispatch<React.SetStateAction<MetodoPago[]>>;
 }
 
 export default function BudgetDashboard({
@@ -59,6 +62,8 @@ export default function BudgetDashboard({
   setActiveList,
   activeStoreId,
   setActiveStoreId,
+  payments,
+  setPayments,
 }: BudgetDashboardProps) {
   // Editing state for main global budget
   const [isEditingBudget, setIsEditingBudget] = useState(false);
@@ -76,6 +81,19 @@ export default function BudgetDashboard({
   const [importString, setImportString] = useState('');
   const [backupFeedback, setBackupFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Payments Config state variables
+  const [isAddingPayment, setIsAddingPayment] = useState(false);
+  const [newPaymentName, setNewPaymentName] = useState('');
+  const [newPaymentType, setNewPaymentType] = useState<'vales' | 'tdc' | 'efectivo' | 'debito'>('tdc');
+  const [newPaymentColor, setNewPaymentColor] = useState('bg-selectos-blue');
+  const [newPaymentDesc, setNewPaymentDesc] = useState('');
+
+  const [editingPaymentId, setEditingPaymentId] = useState<string | null>(null);
+  const [editPaymentName, setEditPaymentName] = useState('');
+  const [editPaymentType, setEditPaymentType] = useState<'vales' | 'tdc' | 'efectivo' | 'debito'>('tdc');
+  const [editPaymentColor, setEditPaymentColor] = useState('bg-selectos-blue');
+  const [editPaymentDesc, setEditPaymentDesc] = useState('');
 
   // --- MATHEMATICAL ANALYSIS & CALCULATIONS (TOTALLY ACCURATE) ---
 
@@ -170,6 +188,72 @@ export default function BudgetDashboard({
       setCategories(categories.map(c => c.id === catId ? { ...c, limiteGastoSugerido: val } : c));
       setEditingCatId(null);
     }
+  };
+
+  // --- CUSTOM PAYMENT METHODS CRUD HANDLERS ---
+  const handleAddPayment = () => {
+    if (!newPaymentName.trim()) return;
+    const newPayment: MetodoPago = {
+      id: 'pay_' + Date.now().toString(),
+      nombre: newPaymentName.trim(),
+      tipo: newPaymentType,
+      color: newPaymentColor,
+      descripcion: newPaymentDesc.trim() || 'Método de pago personalizado'
+    };
+    setPayments([...payments, newPayment]);
+    
+    // Clear inputs
+    setNewPaymentName('');
+    setNewPaymentDesc('');
+    setIsAddingPayment(false);
+    
+    setBackupFeedback({
+      type: 'success',
+      message: '💳 Nuevo método de pago configurado con éxito.'
+    });
+    setTimeout(() => setBackupFeedback(null), 4000);
+  };
+
+  const handleSavePayment = (id: string) => {
+    if (!editPaymentName.trim()) return;
+    setPayments(payments.map(p => p.id === id ? {
+      ...p,
+      nombre: editPaymentName.trim(),
+      tipo: editPaymentType,
+      color: editPaymentColor,
+      descripcion: editPaymentDesc.trim()
+    } : p));
+    setEditingPaymentId(null);
+    
+    setBackupFeedback({
+      type: 'success',
+      message: '💳 Método de pago actualizado correctamente.'
+    });
+    setTimeout(() => setBackupFeedback(null), 4000);
+  };
+
+  const handleDeletePayment = (id: string) => {
+    setPayments(payments.filter(p => p.id !== id));
+    setBackupFeedback({
+      type: 'success',
+      message: '🗑️ Método de pago eliminado con éxito.'
+    });
+    setTimeout(() => setBackupFeedback(null), 4000);
+  };
+
+  // --- TOTAL SYSTEM DATA ERASE / "TODO A CEROS" ---
+  const handleResetWholeApp = () => {
+    setActiveList([]);
+    setHistory([]);
+    setGlobalBudget(0);
+    setStores(stores.map(s => ({ ...s, presupuestoMensual: 0 })));
+    setCategories(categories.map(c => ({ ...c, limiteGastoSugerido: 0 })));
+    
+    setBackupFeedback({
+      type: 'success',
+      message: '🧹 ¡Limpieza completa! Historial, presupuestos, carretilla y límites se han restablecido a ceros.'
+    });
+    setTimeout(() => setBackupFeedback(null), 6500);
   };
 
   // --- SVG PROGRESS GAUGE MATHEMATICS (SAFE AND STUNNING) ---
@@ -347,6 +431,66 @@ export default function BudgetDashboard({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* SECCIÓN: ¿DÓNDE ESTOY COMPRANDO? */}
+      <div className="bg-slate-900 border border-slate-800/80 p-5 rounded-2xl shadow-xl space-y-3 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-24 h-24 bg-selectos-blue/5 rounded-full blur-2xl pointer-events-none" />
+        
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/60 pb-3">
+          <div>
+            <h3 className="text-xs font-black uppercase tracking-widest text-slate-150 flex items-center gap-1.5">
+              <Store className="w-4 h-4 text-selectos-cyan" />
+              <span>Súper / Comercio Seleccionado (¿Dónde compras hoy?)</span>
+            </h3>
+            <p className="text-[10px] text-slate-500 font-bold">
+              Elige el comercio activo para optimizar tarjetas de crédito salvadoreñas, cashbacks afiliados y alarmas de límites de compra específicos.
+            </p>
+          </div>
+          <span className="text-[10px] font-mono bg-slate-950 text-slate-400 px-2.5 py-1 rounded-md border border-slate-850 self-start sm:self-center">
+            Punto de Pago: <strong className="text-selectos-cyan font-black">{stores.find(s => s.id === activeStoreId)?.nombre || 'Ninguno'}</strong>
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+          {stores.map((store) => {
+            const isSelected = store.id === activeStoreId;
+            return (
+              <button
+                key={store.id}
+                onClick={() => setActiveStoreId(store.id)}
+                className={`relative p-3.5 rounded-xl border text-left transition duration-150 cursor-pointer overflow-hidden group select-none flex flex-col justify-between min-h-[90px] ${
+                  isSelected 
+                    ? 'bg-selectos-navy/40 border-selectos-cyan shadow-[0_0_15px_-3px_rgba(6,182,212,0.15)] bg-slate-900' 
+                    : 'bg-slate-950/80 border-slate-850 hover:border-slate-800/80 hover:bg-slate-950'
+                }`}
+              >
+                {/* Active check bubble badge */}
+                {isSelected && (
+                  <div className="absolute top-2.5 right-2.5 bg-selectos-cyan text-slate-950 p-0.5 rounded-full z-10 scale-90">
+                    <Check className="w-2.5 h-2.5 stroke-[4]" />
+                  </div>
+                )}
+                
+                <div className="space-y-1">
+                  <span className={`text-[10px] font-black block uppercase tracking-wider ${isSelected ? 'text-selectos-cyan' : 'text-slate-400'}`}>
+                    {store.nombre}
+                  </span>
+                  <span className="text-[9px] text-slate-500 block leading-tight">
+                    Sugerido: {store.metodoPagoSugerido}
+                  </span>
+                </div>
+
+                <div className="pt-2 text-[10px] flex items-baseline justify-between text-slate-600 font-mono mt-auto">
+                  <span>Meta:</span>
+                  <span className={`font-bold ${isSelected ? 'text-white' : 'text-slate-500'}`}>
+                    ${store.presupuestoMensual}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* UPPER HIGH PERFORMANCE STATS SECTION (BENTO GRID WITH RADIAL METERS) */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -818,6 +962,259 @@ export default function BudgetDashboard({
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* SECCIÓN CONFIGURACIÓN MÉTODOS DE PAGO */}
+      <div className="bg-slate-900 border border-slate-800/80 rounded-2xl p-5 space-y-4 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/60 pb-3">
+          <div>
+            <h3 className="text-xs font-black uppercase tracking-widest text-slate-150 flex items-center gap-1.5">
+              <Wallet className="w-4 h-4 text-selectos-cyan" />
+              <span>Configuración de Métodos de Pago</span>
+            </h3>
+            <p className="text-[10px] text-slate-500 font-bold">
+              Agrega, asocia, edita y elimina tus tarjetas con promociones BAC/CUSCATLAN o efectivo para dividir la cuenta en caja.
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              setIsAddingPayment(!isAddingPayment);
+              setEditingPaymentId(null);
+            }}
+            className="text-[10px] font-black uppercase tracking-wider bg-selectos-cyan hover:bg-cyan-400 text-slate-950 px-3 py-1.5 rounded-lg transition shrink-0"
+          >
+            {isAddingPayment ? '✕ Cerrar Formulario' : '➕ Configurar Nuevo Método'}
+          </button>
+        </div>
+
+        {/* Create/Add Payment Form */}
+        <AnimatePresence>
+          {isAddingPayment && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3.5"
+            >
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-selectos-cyan">
+                Crear Nuevo Canal de Pago
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[10px] text-slate-400 font-bold">Nombre del Método / Tarjeta</label>
+                  <input
+                    type="text"
+                    placeholder="Ej. Visa Cuscatlán Súper"
+                    value={newPaymentName}
+                    onChange={(e) => setNewPaymentName(e.target.value)}
+                    className="w-full bg-slate-900 text-slate-100 placeholder-slate-600 border border-slate-850 rounded px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-selectos-cyan focus:outline-none"
+                  />
+                </div>
+                
+                <div className="space-y-1">
+                  <label className="text-[10px] text-slate-400 font-bold">Tipo de Fondo</label>
+                  <select
+                    value={newPaymentType}
+                    onChange={(e) => setNewPaymentType(e.target.value as 'vales' | 'tdc' | 'efectivo' | 'debito')}
+                    className="w-full bg-slate-900 text-slate-200 border border-slate-850 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-selectos-cyan focus:outline-none"
+                  >
+                    <option value="tdc">💳 Tarjeta de Crédito (TDC)</option>
+                    <option value="debito">💳 Tarjeta de Débito</option>
+                    <option value="efectivo">💵 Efectivo / Chivo Wallet</option>
+                    <option value="vales">🎫 Vales de Despensa / Cupones</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] text-slate-400 font-bold">Color Distintivo</label>
+                  <select
+                    value={newPaymentColor}
+                    onChange={(e) => setNewPaymentColor(e.target.value)}
+                    className="w-full bg-slate-900 text-slate-200 border border-slate-850 rounded px-2 py-1.5 text-xs focus:ring-1 focus:ring-selectos-cyan focus:outline-none"
+                  >
+                    <option value="bg-selectos-blue">Nacional Azuledo</option>
+                    <option value="bg-fuchsia-600">Fucsia Promocional</option>
+                    <option value="bg-emerald-600">Verde Orgánico</option>
+                    <option value="bg-amber-600">Dorado Premium</option>
+                    <option value="bg-rose-600">Rojo Tarjeta Bancaria</option>
+                    <option value="bg-slate-600">Gris Acero</option>
+                    <option value="bg-indigo-600">Morado Digital</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] text-slate-400 font-bold">Descripción / Promoción</label>
+                  <input
+                    type="text"
+                    placeholder="Ej. Devuelve 10% en Selectos los miércoles"
+                    value={newPaymentDesc}
+                    onChange={(e) => setNewPaymentDesc(e.target.value)}
+                    className="w-full bg-slate-900 text-slate-100 placeholder-slate-600 border border-slate-850 rounded px-2.5 py-1.5 text-xs focus:ring-1 focus:ring-selectos-cyan focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-2 border-t border-slate-900/80">
+                <button
+                  onClick={handleAddPayment}
+                  disabled={!newPaymentName.trim()}
+                  className="bg-selectos-green hover:bg-emerald-600 text-white font-bold text-xs uppercase px-4 py-1.8 rounded-lg transition disabled:opacity-40"
+                >
+                  Confirmar Canal de Pago
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Existing Payment Card List */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {payments.map((pay) => {
+            const isEditingThis = editingPaymentId === pay.id;
+            return (
+              <div
+                key={pay.id}
+                className="bg-slate-950 p-3 rounded-xl border border-slate-850 flex flex-col justify-between hover:border-slate-800 transition relative overflow-hidden"
+              >
+                {/* Visual color bar indicator */}
+                <div className={`absolute top-0 left-0 right-0 h-1 ${pay.color}`} />
+
+                {isEditingThis ? (
+                  <div className="space-y-2 pt-2">
+                    <div>
+                      <label className="text-[8px] text-slate-500 uppercase font-black">Nombre</label>
+                      <input
+                        type="text"
+                        value={editPaymentName}
+                        onChange={(e) => setEditPaymentName(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-100 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[8px] text-slate-500 uppercase font-black">Tipo</label>
+                      <select
+                        value={editPaymentType}
+                        onChange={(e) => setEditPaymentType(e.target.value as 'vales' | 'tdc' | 'efectivo' | 'debito')}
+                        className="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-300 focus:outline-none"
+                      >
+                        <option value="tdc">💳 Tarjeta Crédito (TDC)</option>
+                        <option value="debito">💳 Tarjeta Débito</option>
+                        <option value="efectivo">💵 Efectivo / Wallet</option>
+                        <option value="vales">🎫 Vales de Despensa</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[8px] text-slate-500 uppercase font-black">Color</label>
+                      <select
+                        value={editPaymentColor}
+                        onChange={(e) => setEditPaymentColor(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-300 focus:outline-none"
+                      >
+                        <option value="bg-selectos-blue">Nacional Azuledo</option>
+                        <option value="bg-fuchsia-600">Fucsia Promocional</option>
+                        <option value="bg-emerald-600">Verde Orgánico</option>
+                        <option value="bg-amber-600">Dorado Premium</option>
+                        <option value="bg-rose-600">Rojo Tarjeta</option>
+                        <option value="bg-slate-600">Gris Acero</option>
+                        <option value="bg-indigo-600">Morado Digital</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[8px] text-slate-500 uppercase font-black">Características</label>
+                      <input
+                        type="text"
+                        value={editPaymentDesc}
+                        onChange={(e) => setEditPaymentDesc(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-100 focus:outline-none"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-1.5 pt-1.5 border-t border-slate-900">
+                      <button
+                        onClick={() => setEditingPaymentId(null)}
+                        className="bg-slate-900 border border-slate-850 hover:bg-slate-800 text-slate-400 text-[10px] px-2 py-1 rounded cursor-pointer"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={() => handleSavePayment(pay.id)}
+                        className="bg-selectos-cyan hover:bg-cyan-400 text-slate-950 font-black text-[10px] px-2 py-1 rounded cursor-pointer"
+                      >
+                        Guardar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-1.5 pt-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-slate-200">{pay.nombre}</span>
+                        <span className="text-[8px] font-black uppercase tracking-wider bg-slate-900 px-1.5 py-0.5 rounded text-slate-400">
+                          {pay.tipo === 'tdc' ? '💳 TDC' : pay.tipo === 'debito' ? '💳 Débito' : pay.tipo === 'efectivo' ? '💵 Efectivo' : '🎫 Vales'}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 min-h-[25px] leading-relaxed">
+                        {pay.descripcion}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between border-t border-slate-900/60 pt-2 mt-2 gap-2">
+                      <button
+                        onClick={() => {
+                          setEditingPaymentId(pay.id);
+                          setEditPaymentName(pay.nombre);
+                          setEditPaymentColor(pay.color);
+                          setEditPaymentType(pay.tipo);
+                          setEditPaymentDesc(pay.descripcion || '');
+                        }}
+                        className="text-[10px] text-selectos-cyan hover:underline font-bold"
+                      >
+                        Editar Canal
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          if (window.confirm('¿Deseas borrar este método de pago permanente? No se podrá usar en divisor de caja si lo remueves.')) {
+                            handleDeletePayment(pay.id);
+                          }
+                        }}
+                        className="text-slate-500 hover:text-rose-500 p-1 transition cursor-pointer"
+                        title="Haga clic para eliminar este método de pago"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* SECCIÓN EXTRAORDINARIA DANGER AREA: RE-INITIALIZATION A CEROS */}
+      <div className="bg-rose-950/10 border border-rose-500/20 rounded-2xl p-5 space-y-3.5 shadow-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-0.5">
+            <h4 className="text-xs font-black tracking-widest uppercase text-rose-300 flex items-center gap-1.5">
+              <AlertTriangle className="text-rose-400 w-4 h-4" />
+              <span>Zona de Control: Iniciar Todo a Ceros ("Quiero todo a ceros")</span>
+            </h4>
+            <p className="text-[10px] text-rose-400 max-w-2xl font-medium leading-relaxed">
+              Esta acción limpiará todo el historial de compras del mes de forma definitiva, vaciará la carretilla activa de víveres, restablecerá tu presupuesto global mensual a $0 USD y pondrá a cero todos los límites máximos por supermercado y categoría. ¡Ideal para partir limpio!
+            </p>
+          </div>
+          
+          <button
+            onClick={() => {
+              if (window.confirm('¿Estás absolutamente seguro de que quieres restablecer todo el sistema a ceros? Esta acción no se puede deshacer.')) {
+                handleResetWholeApp();
+              }
+            }}
+            className="bg-rose-600 hover:bg-rose-700 text-white font-black text-xs uppercase px-4 py-2.5 rounded-xl transition shadow-lg shrink-0 cursor-pointer"
+          >
+            🧹 Borrar Todo & Iniciar a Ceros
+          </button>
         </div>
       </div>
 

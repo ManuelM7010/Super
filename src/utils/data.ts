@@ -59,104 +59,10 @@ export const DEFAULT_PAYMENTS: MetodoPago[] = [
 ];
 
 // Seeding historic purchases representing realistic price variations in USD
-export const DEFAULT_HISTORICAL_PURCHASES: CompraHistorica[] = [
-  // --- MARZO 2026 ---
-  {
-    id: "h_mar_wallet",
-    fecha: "2026-03-10",
-    tiendaId: "selectos",
-    precioFinalPagado: 22.80,
-    metodoPagoUtilizado: "TDC BAC Súper (7% Desc o Cashback)",
-    articulos: [
-      { id: "m1", nombre: "Leche Entera 1L Salud", categoriaId: "despensa", cantidadPlanificada: 4, precioEstimadoUnitario: 1.50, cantidadRealComprada: 4, precioRealEstante: 1.50, estado: "en_carrito", esArticuloExtra: false },
-      { id: "m2", nombre: "Huevo Blanco 30 piezas (Cartón)", categoriaId: "frescos", cantidadPlanificada: 1, precioEstimadoUnitario: 4.20, cantidadRealComprada: 1, precioRealEstante: 4.20, estado: "en_carrito", esArticuloExtra: false },
-      { id: "m3", nombre: "Pan de Caja Integral 600g Bimbo", categoriaId: "despensa", cantidadPlanificada: 1, precioEstimadoUnitario: 2.60, cantidadRealComprada: 1, precioRealEstante: 2.60, estado: "en_carrito", esArticuloExtra: false },
-      { id: "m4", nombre: "Pechuga de Pollo 1Kg", categoriaId: "frescos", cantidadPlanificada: 1.5, precioEstimadoUnitario: 5.20, cantidadRealComprada: 1.5, precioRealEstante: 5.20, estado: "en_carrito", esArticuloExtra: false },
-      { id: "m5", nombre: "Refresco de Cola 2L", categoriaId: "bebidas", cantidadPlanificada: 2, precioEstimadoUnitario: 1.90, cantidadRealComprada: 2, precioRealEstante: 1.90, estado: "en_carrito", esArticuloExtra: true }
-    ]
-  },
-  // --- ABRIL 2026 ---
-  {
-    id: "h_abr_wallet",
-    fecha: "2026-04-12",
-    tiendaId: "selectos",
-    precioFinalPagado: 24.15,
-    metodoPagoUtilizado: "TDC BAC Súper (7% Desc o Cashback)",
-    articulos: [
-      { id: "a1", nombre: "Leche Entera 1L Salud", categoriaId: "despensa", cantidadPlanificada: 4, precioEstimadoUnitario: 1.50, cantidadRealComprada: 4, precioRealEstante: 1.55, estado: "en_carrito", esArticuloExtra: false },
-      { id: "a2", nombre: "Huevo Blanco 30 piezas (Cartón)", categoriaId: "frescos", cantidadPlanificada: 1, precioEstimadoUnitario: 4.20, cantidadRealComprada: 1, precioRealEstante: 4.40, estado: "en_carrito", esArticuloExtra: false },
-      { id: "a3", nombre: "Pan de Caja Integral 600g Bimbo", categoriaId: "despensa", cantidadPlanificada: 1, precioEstimadoUnitario: 2.60, cantidadRealComprada: 1, precioRealEstante: 2.70, estado: "en_carrito", esArticuloExtra: false },
-      { id: "a4", nombre: "Pechuga de Pollo 1Kg", categoriaId: "frescos", cantidadPlanificada: 1.5, precioEstimadoUnitario: 5.20, cantidadRealComprada: 1.5, precioRealEstante: 5.40, estado: "en_carrito", esArticuloExtra: false },
-      { id: "a5", nombre: "Refresco de Cola 2L", categoriaId: "bebidas", cantidadPlanificada: 2, precioEstimadoUnitario: 1.90, cantidadRealComprada: 2, precioRealEstante: 2.05, estado: "en_carrito", esArticuloExtra: true }
-    ]
-  },
-  // --- MAYO 2026 ---
-  {
-    id: "h_may_wallet",
-    fecha: "2026-05-15",
-    tiendaId: "selectos",
-    precioFinalPagado: 25.55,
-    metodoPagoUtilizado: "Vales de Despensa",
-    articulos: [
-      { id: "my1", nombre: "Leche Entera 1L Salud", categoriaId: "despensa", cantidadPlanificada: 4, precioEstimadoUnitario: 1.55, cantidadRealComprada: 4, precioRealEstante: 1.60, estado: "en_carrito", esArticuloExtra: false },
-      { id: "my2", nombre: "Huevo Blanco 30 piezas (Cartón)", categoriaId: "frescos", cantidadPlanificada: 1, precioEstimadoUnitario: 4.40, cantidadRealComprada: 1, precioRealEstante: 4.75, estado: "en_carrito", esArticuloExtra: false },
-      { id: "my3", nombre: "Pan de Caja Integral 600g Bimbo", categoriaId: "despensa", cantidadPlanificada: 1, precioEstimadoUnitario: 2.70, cantidadRealComprada: 1, precioRealEstante: 2.80, estado: "en_carrito", esArticuloExtra: false },
-      { id: "my4", nombre: "Pechuga de Pollo 1Kg", categoriaId: "frescos", cantidadPlanificada: 1.5, precioEstimadoUnitario: 5.40, cantidadRealComprada: 1.5, precioRealEstante: 5.60, estado: "en_carrito", esArticuloExtra: false },
-      { id: "my5", nombre: "Refresco de Cola 2L", categoriaId: "bebidas", cantidadPlanificada: 2, precioEstimadoUnitario: 2.05, cantidadRealComprada: 2, precioRealEstante: 2.10, estado: "en_carrito", esArticuloExtra: true }
-    ]
-  },
-  // La Despensa de Don Juan
-  {
-    id: "h_may_city",
-    fecha: "2026-05-20",
-    tiendaId: "despensa_juan",
-    precioFinalPagado: 28.10,
-    metodoPagoUtilizado: "Vales de Despensa",
-    articulos: [
-      { id: "mc1", nombre: "Leche Entera 1L Salud", categoriaId: "despensa", cantidadPlanificada: 4, precioEstimadoUnitario: 1.60, cantidadRealComprada: 4, precioRealEstante: 1.75, estado: "en_carrito", esArticuloExtra: false },
-      { id: "mc2", nombre: "Huevo Blanco 30 piezas (Cartón)", categoriaId: "frescos", cantidadPlanificada: 1, precioEstimadoUnitario: 4.75, cantidadRealComprada: 1, precioRealEstante: 5.15, estado: "en_carrito", esArticuloExtra: false },
-      { id: "mc3", nombre: "Pan de Caja Integral 600g Bimbo", categoriaId: "despensa", cantidadPlanificada: 1, precioEstimadoUnitario: 2.80, cantidadRealComprada: 1, precioRealEstante: 3.10, estado: "en_carrito", esArticuloExtra: false },
-      { id: "mc4", nombre: "Pechuga de Pollo 1Kg", categoriaId: "frescos", cantidadPlanificada: 1.5, precioEstimadoUnitario: 5.60, cantidadRealComprada: 1.5, precioRealEstante: 6.00, estado: "en_carrito", esArticuloExtra: false },
-      { id: "mc5", nombre: "Refresco de Cola 2L", categoriaId: "bebidas", cantidadPlanificada: 2, precioEstimadoUnitario: 2.10, cantidadRealComprada: 2, precioRealEstante: 2.30, estado: "en_carrito", esArticuloExtra: false }
-    ]
-  },
-  // PriceSmart club compras por volumen
-  {
-    id: "h_may_costco",
-    fecha: "2026-05-28",
-    tiendaId: "pricesmart",
-    precioFinalPagado: 60.50,
-    metodoPagoUtilizado: "TDC PriceSmart BAC",
-    articulos: [
-      { id: "cc1", nombre: "Croquetas Perro Adulto 4Kg", categoriaId: "mascotas", cantidadPlanificada: 2, precioEstimadoUnitario: 13.50, cantidadRealComprada: 2, precioRealEstante: 13.50, estado: "en_carrito", esArticuloExtra: false },
-      { id: "cc2", nombre: "Detergente Líquido Maxx 3L", categoriaId: "limpieza", cantidadPlanificada: 2, precioEstimadoUnitario: 8.00, cantidadRealComprada: 2, precioRealEstante: 8.00, estado: "en_carrito", esArticuloExtra: false },
-      { id: "cc3", nombre: "Papel Higiénico 12 rollos", categoriaId: "limpieza", cantidadPlanificada: 5, precioEstimadoUnitario: 3.80, cantidadRealComprada: 5, precioRealEstante: 3.50, estado: "en_carrito", esArticuloExtra: false }
-    ]
-  },
-  // Despensa Familiar (precios súper bajos para comparar)
-  {
-    id: "h_may_aurrera",
-    fecha: "2026-05-30",
-    tiendaId: "despensa_familiar",
-    precioFinalPagado: 21.65,
-    metodoPagoUtilizado: "Efectivo / Chivo Wallet (USD)",
-    articulos: [
-      { id: "au1", nombre: "Leche Entera 1L Salud", categoriaId: "despensa", cantidadPlanificada: 4, precioEstimadoUnitario: 1.50, cantidadRealComprada: 4, precioRealEstante: 1.45, estado: "en_carrito", esArticuloExtra: false },
-      { id: "au2", nombre: "Huevo Blanco 30 piezas (Cartón)", categoriaId: "frescos", cantidadPlanificada: 1, precioEstimadoUnitario: 4.10, cantidadRealComprada: 1, precioRealEstante: 4.10, estado: "en_carrito", esArticuloExtra: false },
-      { id: "au3", nombre: "Pan de Caja Integral 600g Bimbo", categoriaId: "despensa", cantidadPlanificada: 1, precioEstimadoUnitario: 2.50, cantidadRealComprada: 1, precioRealEstante: 2.40, estado: "en_carrito", esArticuloExtra: false },
-      { id: "au4", nombre: "Pechuga de Pollo 1Kg", categoriaId: "frescos", cantidadPlanificada: 1.5, precioEstimadoUnitario: 5.10, cantidadRealComprada: 1.5, precioRealEstante: 4.90, estado: "en_carrito", esArticuloExtra: false },
-      { id: "au5", nombre: "Refresco de Cola 2L", categoriaId: "bebidas", cantidadPlanificada: 2, precioEstimadoUnitario: 2.00, cantidadRealComprada: 2, precioRealEstante: 2.10, estado: "en_carrito", esArticuloExtra: false }
-    ]
-  }
-];
+export const DEFAULT_HISTORICAL_PURCHASES: CompraHistorica[] = [];
 
 // Seed active list (current draft list for the supermarket run)
-export const DEFAULT_ACTIVE_LIST_SEED: Articulo[] = [
-  { id: "act1", nombre: "Leche Entera 1L Salud", categoriaId: "despensa", cantidadPlanificada: 4, precioEstimadoUnitario: 1.65, cantidadRealComprada: 4, precioRealEstante: 1.65, estado: "pendiente", esArticuloExtra: false },
-  { id: "act2", nombre: "Huevo Blanco 30 piezas (Cartón)", categoriaId: "frescos", cantidadPlanificada: 1, precioEstimadoUnitario: 4.90, cantidadRealComprada: 1, precioRealEstante: 4.90, estado: "pendiente", esArticuloExtra: false },
-  { id: "act3", nombre: "Pan de Caja Integral 600g Bimbo", categoriaId: "despensa", cantidadPlanificada: 1, precioEstimadoUnitario: 2.85, cantidadRealComprada: 1, precioRealEstante: 2.85, estado: "pendiente", esArticuloExtra: false },
-  { id: "act4", nombre: "Detergente Líquido Maxx 3L", categoriaId: "limpieza", cantidadPlanificada: 1, precioEstimadoUnitario: 8.50, cantidadRealComprada: 1, precioRealEstante: 8.50, estado: "en_carrito", esArticuloExtra: false },
-];
+export const DEFAULT_ACTIVE_LIST_SEED: Articulo[] = [];
 
 export const STORAGE_KEYS = {
   STORES: 'super_tiendas_v1',

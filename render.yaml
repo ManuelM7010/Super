@@ -1,0 +1,30 @@
+# Blueprint configuration for automatic, robust deployment to Render.com
+# Ref: https://render.com/docs/yaml-spec
+services:
+  - type: web
+    name: super-selectos-copilot-ai
+    env: node
+    plan: free # Can be 'free', 'starter', or higher
+    
+    # Render's build command compiles both the React frontend and the Express backend
+    buildCommand: npm run build
+    
+    # Standard server launch using the optimized bundled CommonJS build
+    startCommand: npm start
+    
+    # Environment Variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+      
+      - key: GEMINI_API_KEY
+        sync: false
+        placeholder: "Ingresa tu clave de API de Gemini (desde Google AI Studio)"
+      
+      - key: APP_URL
+        sync: false
+        placeholder: "La URL pública asignada por Render después del despliegue"
+
+      # Optional configuration to specify Node.js version
+      - key: NODE_VERSION
+        value: 20

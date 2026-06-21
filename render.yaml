@@ -6,8 +6,8 @@ services:
     env: node
     plan: free # Can be 'free', 'starter', or higher
     
-    # Render's build command compiles both the React frontend and the Express backend
-    buildCommand: npm run build
+    # Render's build command installs dev dependencies first and then compiles the full-stack bundle
+    buildCommand: npm install --include=dev && npm run build
     
     # Standard server launch using the optimized bundled CommonJS build
     startCommand: npm start
